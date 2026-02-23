@@ -1,0 +1,32 @@
+[Unit]
+Description=StreamFlow Backend API
+After=network.target
+
+[Service]
+Type=simple
+User=streamflow
+WorkingDirectory=/opt/streamflow/app/backend
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+
+# ── CHANGE THESE to match your AWS environment ────────────────────────────
+# DB_HOST:          Your RDS endpoint from AWS Console > RDS > Databases
+# S3_BUCKET_NAME:   Your S3 bucket name
+# DB_SECRET_NAME:   The secret name you created in Secrets Manager
+# ─────────────────────────────────────────────────────────────────────────
+Environment=NODE_ENV=production
+Environment=BACKEND_PORT=4000
+Environment=AWS_REGION=us-east-1
+Environment=DB_HOST=YOUR_RDS_ENDPOINT.rds.amazonaws.com
+Environment=DB_NAME=streamflow
+Environment=DB_SECRET_NAME=streamflow/db/credentials
+Environment=S3_BUCKET_NAME=streamflow-videos-YOUR_ACCOUNT_ID
+Environment=JWT_SECRET=REPLACE_WITH_STRONG_RANDOM_STRING
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=streamflow-backend
+
+[Install]
+WantedBy=multi-user.target
