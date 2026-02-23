@@ -1,0 +1,26 @@
+[Unit]
+Description=StreamFlow Frontend
+After=network.target
+
+[Service]
+Type=simple
+User=streamflow
+WorkingDirectory=/opt/streamflow/app/frontend
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+
+# ── CHANGE THESE to match your AWS environment ────────────────────────────
+# BACKEND_URL: Your Internal ALB DNS name after creating it in AWS Console.
+# Example:     http://streamflow-internal-alb-xxxx.us-east-1.elb.amazonaws.com
+# ─────────────────────────────────────────────────────────────────────────
+Environment=NODE_ENV=production
+Environment=FRONTEND_PORT=3000
+Environment=BACKEND_URL=http://YOUR_INTERNAL_ALB_DNS.elb.amazonaws.com
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=streamflow-frontend
+
+[Install]
+WantedBy=multi-user.target

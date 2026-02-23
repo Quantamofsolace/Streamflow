@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>StreamFlow Player</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="player-page">
+
+  <!-- Anime emojis are injected here and fall top→bottom when play is pressed (fires ONCE) -->
+  <div id="anime-drop-container"></div>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="header" id="header">
+    <a class="logo" href="/">
+      <div class="logo-icon">&#9654;</div>
+      STREAMFLOW
+    </a>
+    <a href="/" class="close-btn">&#10005;&nbsp; Close Player</a>
+  </header>
+
+  <!-- ═══ PLAYER BODY ═══ -->
+  <div class="player-body-wrap">
+
+    <!-- Title + tags — filled by player.js -->
+    <div class="player-meta">
+      <div>
+        <div class="player-title" id="video-title">Loading...</div>
+        <div class="player-sub"   id="video-sub"></div>
+        <div class="player-tags"  id="video-tags"></div>
+      </div>
+    </div>
+
+    <!--
+      HTML5 VIDEO ELEMENT
+      controls   = show built-in play/pause/volume/fullscreen/seek bar
+      preload    = "metadata" loads duration only, not full video
+      src is set dynamically by player.js from GET /api/videos/:id (signed S3 URL)
+    -->
+    <video id="main-video" class="video-player" controls preload="metadata">
+      <source id="video-src" src="" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+
+    <!-- Controls row: quality picker + download button -->
+    <div class="ctrl-row">
+      <div class="quality-sel">
+        <label for="quality">Quality:</label>
+        <!-- 720p selected by default (moderate quality as required) -->
+        <select id="quality">
+          <option value="480p">480p &mdash; Low</option>
+          <option value="720p" selected>720p &mdash; Recommended</option>
+        </select>
+      </div>
+      <!--
+        Download button calls GET /api/download/:id
+        Backend returns a signed S3 URL with Content-Disposition: attachment
+        so the browser downloads the file instead of streaming it
+      -->
+      <button class="dl-btn" id="download-btn">
+        &darr;&nbsp; Download Episode
+      </button>
+    </div>
+
+    <!-- Episode info bar -->
+    <div class="player-divider">
+      <div class="ep-info" id="episode-info">Episode 1</div>
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        LIVE STREAMING
+      </div>
+    </div>
+
+    <!-- Description — filled by player.js -->
+    <div class="player-desc" id="video-desc"></div>
+
+  </div>
+
+  <script src="/js/player.js"></script>
+</body>
+</html>
